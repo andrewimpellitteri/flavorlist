@@ -77,7 +77,7 @@
                 
                 keywords = rawKeywords.flatMap(keyword => keyword.split(" ").map(kw => kw.trim())); // Split on both commas and spaces, and remove leading/trailing spaces
                 
-                Papa.parse("final_w_mgs.csv", {
+                Papa.parse("new_profiles.csv", {
                     header: true,
                     download: true,
                     skipEmptyLines: true,
@@ -85,7 +85,7 @@
                         const data = results.data;
                         const matchingItems = data.filter(function (row) {
                             const profileKeywords = row.Profile.toLowerCase().split(",").map(keyword => keyword.trim()); // Remove leading/trailing spaces
-                            const mgValues = row.mgs.toLowerCase();
+                            const itemValue = row.Item.toLowerCase();
                             // Check if all entered keywords are present in the profile keywords
                             const allKeywordsPresent = keywords.every(keyword =>
                                 profileKeywords.some(profileKeyword =>
@@ -93,8 +93,8 @@
                                 )
                             );
                             // Check if any of the selected MG checkboxes are present in the "mgs" column
-                            const mgFilterPass = selectedMGs.length === 0 || selectedMGs.some(selectedMG =>
-                                mgValues.includes(selectedMG)
+                            const itemFilterPass = selectedMGs.length === 0 || selectedMGs.some(selectedMG =>
+                                itemValue.includes(selectedMG)
                             );
                             return allKeywordsPresent && mgFilterPass;
 
