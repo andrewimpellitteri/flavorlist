@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="windows-1252">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The Vapor Place - Norwich CT - Vapor Store - Vapor Supplies</title>
+    <meta name="description" content="Premium vapor juices, ecigs, vaporizors and supplies in Norwich Connecticut">
+    <meta name="keywords" content="norwich ct vapor shop, norwich ct vape shop, norwich vape shop, norwich vapor shop, vape, eliquid, ecig, cbd, ejuice, vapor">
+    <meta name="robots" content="index, follow">
+    <link rel="SHORTCUT ICON" href="http://www.thevapor.place/favicon.ico">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <title>The Vapor Place - Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+    <!-- Include your CSV search JavaScript here -->
+    <script>
+        function searchCSV() {
+            let keywords;
+            const mgCheckboxes = document.querySelectorAll('.mgCheckbox');
+            const selectedMGs = Array.from(mgCheckboxes)
+                                    .filter(checkbox => checkbox.checked)
+                                    .map(checkbox => checkbox.id.replace('mg', ''));
+
+            try {
+                const inputText = document.getElementById("searchInput").value.toLowerCase();
+                const rawKeywords = inputText.split(",");
+                
+                keywords = rawKeywords.flatMap(keyword => keyword.split(" ").map(kw => kw.trim())); // Split on both commas and spaces, and remove leading/trailing spaces
+                
+                Papa.parse("final_w_mgs.csv", {
+                    header: true,
+                    download: true,
+                    skipEmptyLines: true,
+                    complete: function (results) {
+                        const data = results.data;
+                        const matchingItems = data.filter(function (row) {
+                            const profileKeywords = row.Profile.toLowerCase().split(",").map(keyword => keyword.trim()); // Remove leading/trailing spaces
+                            const mgValues = row.mgs.toLowerCase();
+                            // Check if all entered keywords are present in the profile keywords
+                            const allKeywordsPresent = keywords.every(keyword =>
+                                profileKeywords.some(profileKeyword =>
+                                    profileKeyword.includes(keyword)
+                                )
+                            );
+                            // Check if any of the selected MG checkboxes are present in the "mgs" column
+                            const mgFilterPass = selectedMGs.length === 0 || selectedMGs.some(selectedMG =>
+                                mgValues.includes(selectedMG)
+                            );
+                            return allKeywordsPresent && mgFilterPass;
+
+                        });
+
+                        displayResults(matchingItems);
+                    }
+                });
+            } catch (error) {
+                console.error("An error occurred:", error);
+            }
+        }
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";
+
+            if (results.length === 0) {
+                resultsDiv.innerHTML = "No results found.";
+                return;
+            }
+
+            // Create containers and lists for DISP and non-DISP items
+            const dispContainer = document.createElement("div");
+            dispContainer.className = "result-container";
+            const nonDispContainer = document.createElement("div");
+            nonDispContainer.className = "result-container";
+
+            const dispList = document.createElement("ul");
+            const nonDispList = document.createElement("ul");
+
+            results.forEach(function (row) {
+                const listItem = document.createElement("li");
+                listItem.textContent = row.Item; // Display the "Item" column
+
+                if (row.Item.startsWith("DISP")) {
+                    // If the Item name starts with "DISP," add it to the DISP list
+                    dispList.appendChild(listItem);
+                } else {
+                    // Otherwise, add it to the non-DISP list
+                    nonDispList.appendChild(listItem);
+                }
+            });
+
+            // Append the DISP and non-DISP lists to their respective containers
+            dispContainer.appendChild(dispList);
+            nonDispContainer.appendChild(nonDispList);
+
+            // Append the containers to the resultsDiv
+            resultsDiv.appendChild(dispContainer);
+            resultsDiv.appendChild(nonDispContainer);
+        }
+    </script>
+</head>
+<body topmargin="0" leftmargin="0" bgcolor="#100E0C" style="font-family: Arial; font-weight: bold; background-image: url('../images/vapor-bg.jpg'); background-attachment: fixed;">
+    <!-- Your existing content and layout structure -->
+
+    <div id="fb-root"></div><script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v5.0"></script>
+
+<body topmargin="0" leftmargin="0" bgcolor="#100E0C" style="font-family: Arial; font-weight: bold; background-image: url('../images/vapor-bg.jpg'); background-attachment: fixed;">
+
+    <div align="center">
+    <center>
+    <table border="0" cellspacing="0" width="1000" cellpadding="0" bgcolor="#FFFFFF" height="506" style="border-collapse: collapse">
+        <tr>
+        <td width="100%" height="0" class="auto-style7">
+        <p align="center">
+        <a href="http://www.thevapor.place/" title="The Vapor Place">
+        <img alt="The Vapor Place" height="288" longdesc="../The Vapor Place - a place to vape" src="../images/the-vapor-place-cloud-logo.jpg" width="1000" style="border-width: 0px"></a></td>
+        </tr>
+        <tr>
+        <td width="100%" bgcolor="#100E0C" height="18">&nbsp;</td>
+        </tr>
+        <tr>
+        <td width="100%">
+        <p style="margin-top: 5px; margin-bottom: 0; text-align: center;" class="auto-style4">
+        <a href="vapor.php" title="Home">
+        <img alt="Home" class="auto-style8" height="54" longdesc="Home" src="images/buttons/button-home.jpg" width="125"></a><a href="about.php" title="About"><img alt="About" class="auto-style8" height="54" longdesc="About" src="images/buttons/button-about.jpg" width="125"></a><a href="menus.php" title="Menu"><img alt="Menu" class="auto-style8" height="54" longdesc="Menu" src="images/buttons/button-menu.jpg" width="125"></a><a href="location.php" title="Location"><img alt="Location" class="auto-style8" height="54" longdesc="Location" src="images/buttons/button-location.jpg" width="125"></a><a href="contact.php" title="Contact"><img alt="Contact" class="auto-style8" height="54" longdesc="Contact" src="images/buttons/button-contact.jpg" width="125"></a></p>
+        <tr>
+        <td width="100%" class="auto-style5">
+        <span class="auto-style6"><strong><br>The Vapor Place is a 21+ Establishment. Valid 
+        I.D. required to enter store.</strong></span><strong><span class="auto-style6"><br>WARNING: Some 
+        products contain nicotine. Nicotine is an addictive chemical.</span></strong>
+    <center>
+
+        <div class="container">
+            <h1>Vape Flavor Search</h1>
+            <div>
+                <!-- Search bar and results display -->
+                <input type="text" id="searchInput" placeholder="Enter a keyword">
+                <button onclick="searchCSV()">Search</button>
+
+            </div>
+            <div>
+                <input type="checkbox" id="mg00" class="mgCheckbox" onchange="searchCSV()">
+                <label for="mgCheckbox">0 mg</label>
+            </div>
+            <div>
+                <input type="checkbox" id="mg12" class="mgCheckbox" onchange="searchCSV()">
+                <label for="mgCheckbox">12 mg</label>
+            </div>
+
+            <div id="results"></div>
+            <!-- Other content specific to this page -->
+        </div>
+
+    
+    <table cellpadding="0" cellspacing="0" style="width: 1000px; background-color: #BCE096;" align="center">
+        <tr>
+        <td style="text-align: center" colspan="3">
+
+    <p align="center" style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+        <p align="center" style="margin-top: 0; margin-bottom: 0">Norwich Location Hours</p>
+
+    <p align="center" style="margin-top: 0; margin-bottom: 0">
+    Mon - Thur &amp; Sat 10:00am - 
+    6:00pm</p>
+
+    <p align="center" style="margin-top: 0; margin-bottom: 0">
+    Fri 10:00am - 8:00pm</p>
+        <p align="center" style="margin-top: 0; margin-bottom: 0">
+        Sun 11:00am - 5:00pm</p>
+        <p align="center" style="margin-top: 0; margin-bottom: 0">
+        &nbsp;</p>
+        <p align="center" style="margin-top: 0; margin-bottom: 0">
+        Groton Location Hours (Drive Thru Only)</p>
+
+    <p align="center" style="margin-top: 0; margin-bottom: 0">
+    Mon - Sat 10:00am - 
+    8:00pm</p>
+
+    <p align="center" style="margin-top: 0; margin-bottom: 0">
+    Sun 11:00am - 6:00pm</p>
+        <p align="center" style="margin-top: 0; margin-bottom: 0">
+        &nbsp;</p>
+        <p align="center" style="margin-top: 0; margin-bottom: 0">
+        Uncasville Location Hours</p>
+
+    <p align="center" style="margin-top: 0; margin-bottom: 0">
+    Mon - Sat 10:00am - 
+    6:00pm</p>
+
+    <p align="center" style="margin-top: 0; margin-bottom: 0">
+    Sun 10:00am - 3:00pm</p>
+        <p align="center" style="margin-top: 0; margin-bottom: 0" class="auto-style13">
+        &nbsp;</p>
+        <img alt="The Vapor Place" height="173" longdesc="The Vapor Place" src="images/tvp-bottom.jpg" width="600" style="height: 150px; width: 520px"><br><br>
+        <br><br>
+        </td>
+        </tr>
+        <tr>
+        <td class="auto-style2">
+        <a href="https://www.facebook.com/thevaporplacect/" target="_blank" title="Facebook"><img alt="Facebook" height="300" longdesc="../vapor/Facebook" src="../images/facebook.jpg" style="height: 30px; width: 30px; border-width: 0px" width="300"></a></td>
+        <td class="auto-style19">
+        <span class="auto-style18"><br>Copyright &copy; </span>
+        <span class="auto-style18"> <a href="http://www.thevapor.place/" title="The Vapor Place">www.TheVapor.place</a></span><br>
+        <br><br></td>
+        <td class="auto-style2"><a href="https://instagram.com/thevaporplacect/" target="_blank" title="Instagram"><img alt="Instagram" height="17" longdesc="../vapor/Instagram" src="../images/instagram-logo.jpg" style="height: 26px; width: 30px; border-width: 0px" width="19"></a></td>
+        </tr>
+    </table>
+
+
+
+    <!-- Your footer and closing tags -->
+</body>
+</html>
