@@ -25,9 +25,43 @@
             padding: 0;
         }
 
+        #searchInput {
+            margin-bottom: 20px;
+        }
+
         .container {
             text-align: center;
             padding: 20px;
+        }
+
+        /* Style for result containers */
+        .result-container {
+            display: inline-block;
+            vertical-align: top;
+            margin: 0 10px 10px 20px;
+            padding: 10px; /* Add padding for inner content */
+            border: 1px solid #ccc; /* Add border */
+            border-radius: 5px; /* Add border radius for rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add drop shadow */
+            background-color: #fff; /* Set background color */
+        }
+
+        /* Style for separators between lists */
+        .separator {
+            border-left: 2px solid #999; /* Adjust the border color and thickness */
+            height: 100%; /* Adjust the height of the line */
+            margin: 0 5px; /* Adjust spacing between the lists */
+        }
+
+        /* Style for list items */
+        ul {
+            list-style-type: none; /* Remove default bullet points */
+            padding: 0; /* Remove default padding */
+        }
+
+        ul li {
+            text-align: left; /* Align text to the left for better readability */
+            padding: 5px 0; /* Add vertical padding for list items */
         }
 
         h1 {
@@ -61,15 +95,53 @@
         #results {
             margin-top: 20px;
         }
+        .checkbox-table {
+            width: 100%; /* Set table width as needed */
+            border-collapse: collapse; /* Remove spaces between cells */
+        }
+
+        .checkbox-table td {
+            padding: 10px; /* Adjust cell padding */
+            border: 1px solid #ccc; /* Border color for each cell */
+        }
+
+        .checkbox-table input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 20px; /* Size of the checkbox */
+            height: 20px;
+            border: 1px solid #ccc; /* Border color */
+            border-radius: 3px; /* Rounded corners */
+            margin-right: 8px; /* Adjust spacing between checkbox and label */
+            outline: none; /* Remove default focus style */
+        }
+
+        .checkbox-table input[type="checkbox"]:checked {
+            background-color: #3b82f6; /* Change background color when checked */
+        }
+
+        .checkbox-table label {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            color: #333;
+        }
     </style>
     <!-- Include your CSV search JavaScript here -->
     <script>
+        function searchOnEnter(event) {
+            if (event.key === "Enter") {
+                searchCSV();
+            }
+        }
+
         function searchCSV() {
             let keywords;
             const mgCheckboxes = document.querySelectorAll('.mgCheckbox');
             const selectedMGs = Array.from(mgCheckboxes)
-                                    .filter(checkbox => checkbox.checked)
-                                    .map(checkbox => checkbox.id.replace('mg', ''));
+                                    .filter(checkbox => checkbox.checked);
+                                    //.map(checkbox => checkbox.id.replace('mg', '')
 
             try {
                 const inputText = document.getElementById("searchInput").value.toLowerCase();
@@ -92,11 +164,13 @@
                                     profileKeyword.includes(keyword)
                                 )
                             );
-                            // Check if any of the selected MG checkboxes are present in the "mgs" column
+                            // Check if any of the selected MG checkboxes are present
                             const itemFilterPass = selectedMGs.length === 0 || selectedMGs.some(selectedMG =>
                                 itemValue.includes(selectedMG)
                             );
-                            return allKeywordsPresent && mgFilterPass;
+
+
+                            return allKeywordsPresent && itemFilterPass;
 
                         });
 
@@ -120,11 +194,16 @@
             // Create containers and lists for DISP and non-DISP items
             const dispContainer = document.createElement("div");
             dispContainer.className = "result-container";
-            const nonDispContainer = document.createElement("div");
-            nonDispContainer.className = "result-container";
+            
+            const saltContainer = document.createElement("div");
+            saltContainer.className = "result-container";
 
+            const subContainer = document.createElement("div");
+            subContainer.className = 'result-container';
+            
             const dispList = document.createElement("ul");
-            const nonDispList = document.createElement("ul");
+            const saltList = document.createElement("ul");
+            const subList = document.createElement("ul");
 
             results.forEach(function (row) {
                 const listItem = document.createElement("li");
@@ -133,19 +212,55 @@
                 if (row.Item.startsWith("DISP")) {
                     // If the Item name starts with "DISP," add it to the DISP list
                     dispList.appendChild(listItem);
-                } else {
+                } else if (row.Item.startsWith("SUB")) {
                     // Otherwise, add it to the non-DISP list
-                    nonDispList.appendChild(listItem);
+                    subList.appendChild(listItem);
+                } else {
+                    saltList.appendChild(listItem);
                 }
             });
 
             // Append the DISP and non-DISP lists to their respective containers
             dispContainer.appendChild(dispList);
-            nonDispContainer.appendChild(nonDispList);
+            saltContainer.appendChild(saltList);
+            subContainer.appendChild(subList);
+
+            const dispSeparator = document.createElement("div");
+            dispSeparator.className = "separator";
+
+            const subSeparator = document.createElement("div");
+            subSeparator.className = "separator";
+
+            const saltSeparator = document.createElement("div");
+            saltSeparator.className = "separator";
+
 
             // Append the containers to the resultsDiv
             resultsDiv.appendChild(dispContainer);
-            resultsDiv.appendChild(nonDispContainer);
+            resultsDiv.appendChild(dispSeparator);
+
+            resultsDiv.appendChild(saltContainer);
+            resultsDiv.appendChild(saltSeparator);
+
+            resultsDiv.appendChild(subContainer);
+            resultsDiv.appendChild(subSeparator);
+
+            // Get all the result containers
+            const containers = document.querySelectorAll('.result-container');
+
+            // Find the maximum width among the containers
+            let maxWidth = 0;
+            containers.forEach(container => {
+                const width = container.offsetWidth;
+                maxWidth = Math.max(maxWidth, width);
+            });
+
+            // Set the maximum width to all containers
+            containers.forEach(container => {
+                container.style.width = `${maxWidth}px`;
+            });
+
+
         }
     </script>
 </head>
@@ -184,18 +299,23 @@
             <h1>Vape Flavor Search</h1>
             <div>
                 <!-- Search bar and results display -->
-                <input type="text" id="searchInput" placeholder="Enter a keyword">
+                <input type="text" id="searchInput" placeholder="Enter a keyword" onkeydown="searchOnEnter(event)">
                 <button onclick="searchCSV()">Search</button>
 
             </div>
-            <div>
-                <input type="checkbox" id="mg00" class="mgCheckbox" onchange="searchCSV()">
-                <label for="mgCheckbox">0 mg</label>
-            </div>
-            <div>
-                <input type="checkbox" id="mg12" class="mgCheckbox" onchange="searchCSV()">
-                <label for="mgCheckbox">12 mg</label>
-            </div>
+            <table class="checkbox-table">
+                <tr>
+                    <td>
+                        <input type="checkbox" id="00mg" class="mgCheckbox" onchange="searchCSV()">
+                        <label for="12mg">0 mg</label>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="12mg" class="mgCheckbox" onchange="searchCSV()">
+                        <label for="12mg">12 mg</label>
+                    </td>
+                    <!-- Add more columns with checkboxes here -->
+                </tr>
+            </table>
 
             <div id="results"></div>
             <!-- Other content specific to this page -->
