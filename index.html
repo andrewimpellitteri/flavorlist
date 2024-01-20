@@ -149,7 +149,7 @@
                 
                 keywords = rawKeywords.flatMap(keyword => keyword.split(" ").map(kw => kw.trim())); // Split on both commas and spaces, and remove leading/trailing spaces
                 
-                Papa.parse("cleaned_profiles.csv", {
+                Papa.parse("final_edited2024.csv", {
                     header: true,
                     download: true,
                     skipEmptyLines: true,
