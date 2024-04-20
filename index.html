@@ -127,6 +127,53 @@
             cursor: pointer;
             color: #333;
         }
+
+        .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 15px 0px;
+    list-style: none;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 600px; /* Set a maximum height for the container */
+}
+
+.card {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s;
+}
+
+.card:hover {
+    color: #ffffff;
+    background: #BCE096;
+}
+
+.card .card-title {
+    font-size: 20px;
+}
+
+.card .card-content {
+    margin: 10px 0;
+}
+
+.card .card-link {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background: #BCE096;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.card:hover .card-link {
+    background: #BCE096;
+}
     </style>
     <!-- Include your CSV search JavaScript here -->
     <script>
@@ -169,7 +216,6 @@
                                 itemValue.includes(selectedMG)
                             );
 
-
                             return allKeywordsPresent && itemFilterPass;
 
                         });
@@ -183,6 +229,83 @@
         }
 
         function displayResults(results) {
+            // const resultsDiv = document.getElementById("results");
+            // resultsDiv.innerHTML = "";
+
+            // if (results.length === 0) {
+            //     resultsDiv.innerHTML = "No results found.";
+            //     return;
+            // }
+
+            // // Create containers and lists for DISP and non-DISP items
+            // const dispContainer = document.createElement("div");
+            // dispContainer.className = "result-container";
+            
+            // const saltContainer = document.createElement("div");
+            // saltContainer.className = "result-container";
+
+            // const subContainer = document.createElement("div");
+            // subContainer.className = 'result-container';
+            
+            // const dispList = document.createElement("ul");
+            // const saltList = document.createElement("ul");
+            // const subList = document.createElement("ul");
+
+            // results.forEach(function (row) {
+            //     const listItem = document.createElement("li");
+            //     listItem.textContent = row.Item; // Display the "Item" column
+
+            //     if (row.Item.startsWith("DISP")) {
+            //         // If the Item name starts with "DISP," add it to the DISP list
+            //         dispList.appendChild(listItem);
+            //     } else if (row.Item.startsWith("SUB")) {
+            //         // Otherwise, add it to the non-DISP list
+            //         subList.appendChild(listItem);
+            //     } else {
+            //         saltList.appendChild(listItem);
+            //     }
+            // });
+
+            // // Append the DISP and non-DISP lists to their respective containers
+            // dispContainer.appendChild(dispList);
+            // saltContainer.appendChild(saltList);
+            // subContainer.appendChild(subList);
+
+            // const dispSeparator = document.createElement("div");
+            // dispSeparator.className = "separator";
+
+            // const subSeparator = document.createElement("div");
+            // subSeparator.className = "separator";
+
+            // const saltSeparator = document.createElement("div");
+            // saltSeparator.className = "separator";
+
+
+            // // Append the containers to the resultsDiv
+            // resultsDiv.appendChild(dispContainer);
+            // resultsDiv.appendChild(dispSeparator);
+
+            // resultsDiv.appendChild(saltContainer);
+            // resultsDiv.appendChild(saltSeparator);
+
+            // resultsDiv.appendChild(subContainer);
+            // resultsDiv.appendChild(subSeparator);
+
+            // // Get all the result containers
+            // const containers = document.querySelectorAll('.result-container');
+
+            // // Find the maximum width among the containers
+            // let maxWidth = 0;
+            // containers.forEach(container => {
+            //     const width = container.offsetWidth;
+            //     maxWidth = Math.max(maxWidth, width);
+            // });
+
+            // // Set the maximum width to all containers
+            // containers.forEach(container => {
+            //     container.style.width = `${maxWidth}px`;
+            // });
+
             const resultsDiv = document.getElementById("results");
             resultsDiv.innerHTML = "";
 
@@ -191,76 +314,56 @@
                 return;
             }
 
-            // Create containers and lists for DISP and non-DISP items
-            const dispContainer = document.createElement("div");
-            dispContainer.className = "result-container";
-            
-            const saltContainer = document.createElement("div");
-            saltContainer.className = "result-container";
-
-            const subContainer = document.createElement("div");
-            subContainer.className = 'result-container';
-            
-            const dispList = document.createElement("ul");
-            const saltList = document.createElement("ul");
-            const subList = document.createElement("ul");
+            const cardsContainer = document.createElement("ul");
+            cardsContainer.classList.add("cards");
 
             results.forEach(function (row) {
-                const listItem = document.createElement("li");
-                listItem.textContent = row.Item; // Display the "Item" column
+                const card = document.createElement("li");
+                card.classList.add("card");
 
-                if (row.Item.startsWith("DISP")) {
-                    // If the Item name starts with "DISP," add it to the DISP list
-                    dispList.appendChild(listItem);
-                } else if (row.Item.startsWith("SUB")) {
-                    // Otherwise, add it to the non-DISP list
-                    subList.appendChild(listItem);
+                const cardContentWrapper = document.createElement("div");
+
+                const cardTitle = document.createElement("h3");
+                cardTitle.classList.add("card-title");
+
+                var juice_type = row.Item.trim().split(" ")[0];
+                var juice_name = row.Item.split(" ").slice(1).join(" ");
+
+                if (juice_type ==  "DISP") {
+                    juice_type = "Disposable"
+                } else if (juice_type == "SALT") {
+                    juice_type = "Salt"
                 } else {
-                    saltList.appendChild(listItem);
+                    juice_type = "Sub-Ohm"
                 }
+
+                cardTitle.textContent = juice_name;
+
+                const cardContent = document.createElement("div");
+                cardContent.classList.add("card-content");
+                const contentParagraph = document.createElement("p");
+                contentParagraph.textContent = row.Description; // Change 'Description' to the appropriate column name in your data
+                cardContent.appendChild(contentParagraph);
+
+                cardContentWrapper.appendChild(cardTitle);
+                cardContentWrapper.appendChild(cardContent);
+
+                const cardLinkWrapper = document.createElement("div");
+                cardLinkWrapper.classList.add("card-link-wrapper");
+                const cardLink = document.createElement("a");
+                cardLink.classList.add("card-link");
+                cardLink.textContent = juice_type; // You can change the link text as needed
+                cardLink.href = ""; // Set the href attribute to the appropriate link
+                cardLinkWrapper.appendChild(cardLink);
+
+                card.appendChild(cardContentWrapper);
+                card.appendChild(cardLinkWrapper);
+
+                cardsContainer.appendChild(card);
             });
 
-            // Append the DISP and non-DISP lists to their respective containers
-            dispContainer.appendChild(dispList);
-            saltContainer.appendChild(saltList);
-            subContainer.appendChild(subList);
-
-            const dispSeparator = document.createElement("div");
-            dispSeparator.className = "separator";
-
-            const subSeparator = document.createElement("div");
-            subSeparator.className = "separator";
-
-            const saltSeparator = document.createElement("div");
-            saltSeparator.className = "separator";
-
-
-            // Append the containers to the resultsDiv
-            resultsDiv.appendChild(dispContainer);
-            resultsDiv.appendChild(dispSeparator);
-
-            resultsDiv.appendChild(saltContainer);
-            resultsDiv.appendChild(saltSeparator);
-
-            resultsDiv.appendChild(subContainer);
-            resultsDiv.appendChild(subSeparator);
-
-            // Get all the result containers
-            const containers = document.querySelectorAll('.result-container');
-
-            // Find the maximum width among the containers
-            let maxWidth = 0;
-            containers.forEach(container => {
-                const width = container.offsetWidth;
-                maxWidth = Math.max(maxWidth, width);
-            });
-
-            // Set the maximum width to all containers
-            containers.forEach(container => {
-                container.style.width = `${maxWidth}px`;
-            });
-
-
+            resultsDiv.appendChild(cardsContainer);
+        
         }
     </script>
 </head>
@@ -318,6 +421,8 @@
             </table>
 
             <div id="results"></div>
+
+            </div>
             <!-- Other content specific to this page -->
         </div>
 
